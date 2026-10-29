@@ -42,11 +42,14 @@ def owner_only(f):
 def login():
     err = None
     if request.method == "POST":
-        u = run("SELECT * FROM users WHERE username=%s", (request.form["username"].strip(),), fetch=True)
-        if u and check_password_hash(u[0]["password_hash"], request.form["password"]):
-            session.clear(); session["role"] = u[0]["role"]; session["user"] = u[0]["username"]
-            return redirect(url_for("home"))
-        err = "Invalid username or password"
+        try:
+            u = run("SELECT * FROM users WHERE username=%s", (request.form["username"].strip(),), fetch=True)
+            if u and check_password_hash(u[0]["password_hash"], request.form["password"]):
+                session.clear(); session["role"] = u[0]["role"]; session["user"] = u[0]["username"]
+                return redirect(url_for("home"))
+            err = "Invalid username or password"
+        except Exception as e:
+            err = f"Database Error: {e}"
     return render_template("login.html", error=err)
 
 @app.route("/logout")
@@ -93,12 +96,15 @@ def results(): return jsonify(json.load(open(BASE_DIR / "results.json")))
 @app.route("/api/bookings", methods=["GET", "POST"])
 @owner_only
 def bookings():
-    if request.method == "POST":
-        d = request.get_json(); rooms = int(d["rooms"]); price = int(d["price"])
-        if not (0 <= rooms <= pe.ROOMS and 2000 <= price <= 9000): return jsonify(error="rooms 0-20, price 2000-9000"), 400
-        run("INSERT INTO daily_bookings (stay_date, rooms_booked, price) VALUES (%s,%s,%s) "
-            "ON DUPLICATE KEY UPDATE rooms_booked=VALUES(rooms_booked), price=VALUES(price)", (d["date"], rooms, price))
-        return jsonify(ok=True)
-    return jsonify(run("SELECT DATE_FORMAT(stay_date,'%Y-%m-%d') AS date, rooms_booked, price, revenue FROM daily_bookings ORDER BY stay_date DESC LIMIT 10", fetch=True))
+    try:
+        if request.method == "POST":
+            d = request.get_json(); rooms = int(d["rooms"]); price = int(d["price"])
+            if not (0 <= rooms <= pe.ROOMS and 2000 <= price <= 9000): return jsonify(error="rooms 0-20, price 2000-9000"), 400
+            run("INSERT INTO daily_bookings (stay_date, rooms_booked, price) VALUES (%s,%s,%s) "
+                "ON DUPLICATE KEY UPDATE rooms_booked=VALUES(rooms_booked), price=VALUES(price)", (d["date"], rooms, price))
+            return jsonify(ok=True)
+        return jsonify(run("SELECT DATE_FORMAT(stay_date,'%Y-%m-%d') AS date, rooms_booked, price, revenue FROM daily_bookings ORDER BY stay_date DESC LIMIT 10", fetch=True) or [])
+    except Exception as e:
+        return jsonify(error=str(e)), 500
 
 if __name__ == "__main__": app.run(debug=True)
