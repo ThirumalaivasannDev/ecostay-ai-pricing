@@ -13,7 +13,20 @@ load_dotenv(BASE_DIR / ".env")
 app = Flask(__name__); app.secret_key = os.getenv("SECRET_KEY")
 if not app.secret_key: raise RuntimeError("SECRET_KEY missing in .env (see .env.example)")
 app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax")
-model = joblib.load(BASE_DIR / "model.pkl")
+
+# Ensure AI model and results exist before loading (for fresh cloud deploys)
+model_file = BASE_DIR / "model.pkl"
+results_file = BASE_DIR / "results.json"
+data_file = BASE_DIR / "data.csv"
+
+if not model_file.exists() or not results_file.exists():
+    import subprocess, sys
+    print("Model or results missing. Generating dataset and training model...")
+    if not data_file.exists():
+        subprocess.run([sys.executable, str(BASE_DIR / "generate_data.py")], check=True)
+    subprocess.run([sys.executable, str(BASE_DIR / "pricing_engine.py")], check=True)
+
+model = joblib.load(model_file)
 
 def owner_only(f):
     @wraps(f)
