@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#eaf5e8">
+
+    <title>Owner Login | EcoStay Revenue AI</title>
+
+    <style>
+        :root {
+            --green: #17643b;
+            --dark-green: #145532;
+            --text: #18372a;
+            --muted: #687d70;
+            --border: #dce9df;
+            --background: #eaf5e8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px 16px;
+
+            background: linear-gradient(
+                135deg,
+                #eaf5e8,
+                #e5f2e4,
+                #edf7eb
+            );
+
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Login card */
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 32px 30px 27px;
+
+            background: #ffffff;
+            border: 1px solid #e4eee5;
+            border-radius: 13px;
+
+            box-shadow: 0 12px 30px rgba(30, 76, 46, 0.12);
+        }
+
+        /* Logo and heading */
+
+        .brand {
+            text-align: center;
+            margin-bottom: 27px;
+        }
+
+        .brand-mark {
+            width: 43px;
+            height: 43px;
+            margin: 0 auto 8px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 13px;
+            background: #e9f7e8;
+
+            font-size: 25px;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17251d;
+
+            font-size: clamp(25px, 5vw, 29px);
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            margin: 5px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* Input labels */
+
+        .field {
+            display: block;
+            margin: 18px 0 7px;
+
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* Username and password */
+
+        .input {
+            display: block;
+            width: 100%;
+            min-height: 43px;
+            padding: 11px 13px;
+
+            border: 1px solid var(--border);
+            border-radius: 5px;
+
+            background: #ffffff;
+            color: var(--text);
+
+            font-family: inherit;
+            font-size: 14px;
+
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input::placeholder {
+            color: #9aa99e;
+        }
+
+        .input:focus {
+            border-color: #2b8050;
+            box-shadow: 0 0 0 3px rgba(43, 128, 80, 0.12);
+        }
+
+        /* Sign-in button */
+
+        .submit {
+            display: block;
+            width: 100%;
+            min-height: 45px;
+            margin-top: 18px;
+            padding: 12px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: var(--green);
+            color: #ffffff;
+
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+
+            cursor: pointer;
+            box-shadow: 0 4px 9px rgba(23, 100, 59, 0.18);
+
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .submit:hover {
+            background: var(--dark-green);
+        }
+
+        .submit:active {
+            transform: translateY(1px);
+        }
+
+        /* Customer page navigation */
+
+        .public-link {
+            display: block;
+            margin-top: 19px;
+
+            color: #286d48;
+            text-align: center;
+            text-decoration: none;
+
+            font-size: 12px;
+            font-weight: 650;
+        }
+
+        .public-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Flask login error message */
+
+        .error {
+            margin: 15px 0 3px;
+            padding: 10px 12px;
+
+            border: 1px solid #f0c6c8;
+            border-radius: 7px;
+
+            background: #fff0f0;
+            color: #a52b32;
+
+            font-size: 13px;
+        }
+
+        /* Responsive layout */
+
+        @media (max-width: 420px) {
+            .login-card {
+                padding: 29px 23px 25px;
+            }
+
+            .brand {
+                margin-bottom: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main>
+        <form
+            class="login-card"
+            method="post"
+            action="/login"
+            autocomplete="on"
+        >
+
+            <header class="brand">
+
+                <div class="brand-mark" aria-hidden="true">
+                    🌿
+                </div>
+
+                <h1>EcoStay Revenue AI</h1>
+
+                <p class="subtitle">
+                    Owner Dashboard &amp; Dynamic Pricing Control
+                </p>
+
+            </header>
+
+            {% if error %}
+                <div class="error" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <label class="field" for="username">
+                Owner Username
+            </label>
+
+            <input
+                class="input"
+                id="username"
+                name="username"
+                type="text"
+                placeholder="e.g. admin"
+                required
+                autofocus
+                autocomplete="username"
+            >
+
+            <label class="field" for="password">
+                Password
+            </label>
+
+            <input
+                class="input"
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+                required
+                autocomplete="current-password"
+            >
+
+            <button class="submit" type="submit">
+                Sign In to Dashboard
+                <span aria-hidden="true">→</span>
+            </button>
+
+            <a class="public-link" href="/book">
+                ← View Customer Booking Page
+            </a>
+
+        </form>
+    </main>
+
+</body>
+</html>

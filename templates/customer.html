@@ -1,0 +1,653 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f2f8f1">
+
+    <title>EcoStay | Customer Price Page</title>
+
+    <style>
+        :root {
+            --green: #194b2b;
+            --green-light: #e9f4e8;
+            --background: #f3f8f1;
+            --text: #263a2c;
+            --muted: #718071;
+            --border: #e0e9de;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Navigation */
+
+        .navbar {
+            min-height: 65px;
+            padding: 12px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--green);
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .brand-icon {
+            width: 35px;
+            height: 35px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: var(--green-light);
+            font-size: 20px;
+        }
+
+        .brand small {
+            display: block;
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .owner-link {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            background: #ffffff;
+        }
+
+        .owner-link:hover {
+            background: var(--green-light);
+        }
+
+        /* Main content */
+
+        .container {
+            width: min(100% - 36px, 1000px);
+            margin: 0 auto;
+            padding: 48px 0 30px;
+        }
+
+        /* Welcome section */
+
+        .hero {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 13px;
+            border: 1px solid #d9e9d7;
+            border-radius: 30px;
+            background: #e7f3e5;
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .hero h1 {
+            margin: 18px 0 12px;
+            color: #243b29;
+            font-size: clamp(30px, 5vw, 43px);
+            line-height: 1.15;
+            letter-spacing: -1.2px;
+        }
+
+        .hero p {
+            max-width: 620px;
+            margin: 0 auto;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        /* Two-column layout */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            align-items: stretch;
+        }
+
+        .card {
+            padding: 27px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: var(--white);
+            box-shadow: 0 7px 22px rgba(36, 75, 42, 0.045);
+        }
+
+        .card-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 9px;
+        }
+
+        .card h2 {
+            margin: 0;
+            color: #263a2c;
+            font-size: 19px;
+        }
+
+        .suite-badge {
+            white-space: nowrap;
+            padding: 6px 8px;
+            border-radius: 6px;
+            background: #eaf5e9;
+            color: var(--green);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .description {
+            margin: 0 0 24px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        /* Date selection */
+
+        .field-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .date-input {
+            width: 100%;
+            min-height: 43px;
+            padding: 11px 12px;
+            border: 1px solid #d9e4d7;
+            border-radius: 7px;
+            background: #fcfdfb;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .date-input:focus {
+            border-color: #428354;
+            box-shadow: 0 0 0 3px rgba(66, 131, 84, 0.12);
+        }
+
+        /* Price button */
+
+        .price-button {
+            width: 100%;
+            min-height: 43px;
+            margin-top: 13px;
+            padding: 12px;
+            border: 0;
+            border-radius: 7px;
+            background: var(--green);
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .price-button:hover {
+            background: #24653a;
+        }
+
+        .price-button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        /* Price result */
+
+        .price-result {
+            margin-top: 18px;
+            padding: 15px;
+            border: 1px solid #e0eadc;
+            border-radius: 9px;
+            background: #f0f7ee;
+        }
+
+        .stay-date {
+            margin-bottom: 7px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .price-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .price-value {
+            margin: 6px 0;
+            color: var(--green);
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .price-note {
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        .error-message {
+            color: #a52b32;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* Customer benefits */
+
+        .benefits-card {
+            background: #ffffff;
+        }
+
+        .benefits-intro {
+            margin: 11px 0 22px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .benefit {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 19px;
+        }
+
+        .benefit:last-child {
+            margin-bottom: 0;
+        }
+
+        .benefit-icon {
+            flex: 0 0 30px;
+            width: 30px;
+            height: 30px;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            background: #edf6e9;
+            color: var(--green);
+            font-size: 14px;
+        }
+
+        .benefit h3 {
+            margin: 1px 0 5px;
+            color: var(--text);
+            font-size: 12px;
+        }
+
+        .benefit p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+
+        .footer {
+            padding: 21px 16px;
+            border-top: 1px solid var(--border);
+            background: #ffffff;
+            color: var(--muted);
+            text-align: center;
+            font-size: 10px;
+            line-height: 1.7;
+        }
+
+        /* Responsive design */
+
+        @media (max-width: 700px) {
+            .navbar {
+                padding: 12px 18px;
+            }
+
+            .container {
+                width: calc(100% - 30px);
+                padding-top: 32px;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .card {
+                padding: 22px;
+            }
+
+            .hero {
+                margin-bottom: 25px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .brand {
+                font-size: 14px;
+            }
+
+            .owner-link {
+                padding: 7px;
+                font-size: 10px;
+            }
+
+            .card-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation bar -->
+
+    <nav class="navbar">
+        <div class="brand">
+            <span class="brand-icon" aria-hidden="true">🌿</span>
+
+            <div>
+                EcoStay
+                <small>SUSTAINABLE ECO-LODGE</small>
+            </div>
+        </div>
+
+        <a class="owner-link" href="/login">
+            Owner Portal
+        </a>
+    </nav>
+
+    <main class="container">
+
+        <!-- Welcome section -->
+
+        <section class="hero">
+            <span class="badge">
+                ♧ Sustainable Hospitality · Dynamic Rates
+            </span>
+
+            <h1>Experience Luxury in Nature</h1>
+
+            <p>
+                Our intelligent pricing engine adjusts rates for each day.
+                Transparent, real-time eco-lodge room rates with no hidden
+                booking commissions.
+            </p>
+        </section>
+
+        <!-- Price checker and benefits -->
+
+        <section class="content-grid">
+
+            <div class="card">
+
+                <div class="card-heading">
+                    <h2>Check Direct Room Rate</h2>
+
+                    <span class="suite-badge">
+                        20 Private Suites
+                    </span>
+                </div>
+
+                <p class="description">
+                    Select your preferred date to view the estimated
+                    price for one room per night.
+                </p>
+
+                <form id="price-form">
+
+                    <label class="field-label" for="stay-date">
+                        Check-in Date
+                    </label>
+
+                    <input
+                        class="date-input"
+                        id="stay-date"
+                        type="date"
+                        required
+                    >
+
+                    <button
+                        class="price-button"
+                        id="price-button"
+                        type="submit"
+                    >
+                        ✦ Calculate Nightly Rate
+                    </button>
+
+                </form>
+
+                <div
+                    class="price-result"
+                    id="price-result"
+                    aria-live="polite"
+                >
+                    <div class="stay-date" id="stay-date-label">
+                        Select your stay date to begin.
+                    </div>
+
+                    <div class="price-label">
+                        PRICE PER NIGHT
+                    </div>
+
+                    <div class="price-value" id="price-value">
+                        ₹—
+                    </div>
+
+                    <div class="price-note" id="price-note">
+                        Estimated rate per room, per night.
+                    </div>
+                </div>
+
+            </div>
+
+            <aside class="card benefits-card">
+
+                <h2>Why Book Direct With Us?</h2>
+
+                <p class="benefits-intro">
+                    Enjoy a simple, transparent way to explore your
+                    eco-lodge stay.
+                </p>
+
+                <div class="benefit">
+                    <div class="benefit-icon" aria-hidden="true">✓</div>
+
+                    <div>
+                        <h3>Zero Commission Stay</h3>
+                        <p>
+                            Explore our estimated direct rates without
+                            third-party booking commissions.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="benefit">
+                    <div class="benefit-icon" aria-hidden="true">♧</div>
+
+                    <div>
+                        <h3>Farm-to-Table Breakfast</h3>
+                        <p>
+                            Discover a nature-focused hospitality
+                            experience during your stay.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="benefit">
+                    <div class="benefit-icon" aria-hidden="true">◷</div>
+
+                    <div>
+                        <h3>Direct Rate Guidance</h3>
+                        <p>
+                            Check the estimated nightly room price for
+                            your selected date.
+                        </p>
+                    </div>
+                </div>
+
+            </aside>
+
+        </section>
+
+        <p class="price-note" style="margin: 20px 3px;">
+            Note: Prices are AI-generated estimates based on simulated
+            demand data. Checking a price does not confirm a reservation,
+            room availability, or payment.
+        </p>
+
+    </main>
+
+    <footer class="footer">
+        EcoStay AI · AI-Based Dynamic Pricing and Revenue Management
+        for Eco-Tourism Hospitality
+    </footer>
+
+    <script>
+        const form = document.getElementById("price-form");
+        const dateInput = document.getElementById("stay-date");
+        const button = document.getElementById("price-button");
+        const dateLabel = document.getElementById("stay-date-label");
+        const priceValue = document.getElementById("price-value");
+        const priceNote = document.getElementById("price-note");
+
+        // Use the browser's local date rather than UTC.
+        function formatLocalDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+
+            return `${year}-${month}-${day}`;
+        }
+
+        const today = new Date();
+        const maxDate = new Date();
+
+        maxDate.setDate(maxDate.getDate() + 180);
+
+        dateInput.min = formatLocalDate(today);
+        dateInput.max = formatLocalDate(maxDate);
+        dateInput.value = formatLocalDate(today);
+
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            if (!dateInput.value) {
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = "Calculating rate...";
+
+            priceValue.textContent = "₹—";
+            dateLabel.textContent = "Retrieving your estimated price...";
+            priceNote.textContent = "";
+            priceNote.className = "price-note";
+
+            try {
+                const response = await fetch(
+                    "/api/public-price?date=" +
+                    encodeURIComponent(dateInput.value)
+                );
+
+                const data = await response.json();
+
+                if (!response.ok || data.error) {
+                    throw new Error(
+                        data.error || "Unable to retrieve the price."
+                    );
+                }
+
+                const price = Number(data.price_per_night);
+
+                if (!Number.isFinite(price)) {
+                    throw new Error("The returned price is invalid.");
+                }
+
+                const selectedDate = new Date(
+                    data.date + "T00:00:00"
+                );
+
+                const readableDate = selectedDate.toLocaleDateString(
+                    "en-IN",
+                    {
+                        weekday: "long",
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric"
+                    }
+                );
+
+                dateLabel.textContent = "Stay Date: " + readableDate;
+
+                priceValue.textContent = new Intl.NumberFormat(
+                    "en-IN",
+                    {
+                        style: "currency",
+                        currency: "INR",
+                        maximumFractionDigits: 0
+                    }
+                ).format(price);
+
+                priceNote.textContent =
+                    "Estimated price per room, per night. " +
+                    "Reservation is not confirmed.";
+
+            } catch (error) {
+                dateLabel.textContent = "Price unavailable";
+                priceValue.textContent = "—";
+                priceNote.textContent = error.message;
+                priceNote.className = "error-message";
+
+            } finally {
+                button.disabled = false;
+                button.textContent = "✦ Calculate Nightly Rate";
+            }
+        });
+    </script>
+
+</body>
+</html>

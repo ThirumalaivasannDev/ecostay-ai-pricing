@@ -1,0 +1,22 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# virtual environment
+venv/
+.venv/
+
+# python
+__pycache__/
+*.py[cod]
+
+# generated files
+data.csv
+model.pkl
+results.json
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
